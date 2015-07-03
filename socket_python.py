@@ -7,6 +7,8 @@ import struct
 import numpy
 import pyaudio
 
+
+
 def int_from_bytes(bytes):
     ret = 0
     first = 171
@@ -39,18 +41,19 @@ def parsePacket(dump):
     print "Length: " + str(length)
 
     bytes = map(str, orig_bytes)
-    data = b"".join(bytes[12:])
+    d_len = min(length, len(orig_bytes) - 12)
+    data = b"".join(bytes[12:d_len+12])
 
     print len(orig_bytes)
     
     valid = False
-    if not abs(len(orig_bytes) - length) <= 16:
+    if not abs(len(orig_bytes) - length) <= 16 and False:
         print "Looks like a clear mismatch"
     else :
         valid = True
         com_chk = 0
         i = 0;
-        len_bytes = length
+        len_bytes = len(orig_bytes)
         if len_bytes % 4 != 0:
             len_bytes += 4 - (len_bytes % 4)
         while i < len_bytes:
@@ -59,8 +62,10 @@ def parsePacket(dump):
             i += 4
         com_chk = com_chk ^ seq
         print "COMPUTED CHECKSUM: " + str(com_chk)
+        if com_chk == chk:
+            print "CHECKSUM MATCH"
     print "==========================================================================================================================================================================================="
-    return data, valid
+    return (seq, chk, len(orig_bytes), data)
 
 def understand():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -89,14 +94,20 @@ def understand():
     j = 0
     valid = 0;
     while j < i:
-        dumped, isValid = parsePacket(dump_arr[j])
+        dumped = parsePacket(dump_arr[j])
+        j += 1
+        #if dumped[2] % 1448 == 0:
+        #    print "Leaving : " + str(dumped[0])
+        #    continue
+        #print "Adding : " + str(dumped[0])
         seq_arr.append(dumped)
+        isValid = True
         if isValid:
             #seq_arr.append(dumped)
             valid += 1
             #return seq_arr, valid
-        j += 1
     #print seq_arr
+    seq_arr = sorted(seq_arr, key=lambda packet:packet[0]) #sort by seq number
     return seq_arr, valid
                 
 if __name__ == "__main__":
@@ -105,9 +116,15 @@ if __name__ == "__main__":
     print "SEQ 1"
     #print seq_arr1
     print "Number of valid: " + str(valid_items)
-    #p = pyaudio.PyAudio()
-    #stream = p.open(format=pyaudio.paInt8, channels=1, rate=44100, output=1)
-    #stream.write(str(seq_arr1))
+    seq_arr = [tupp[0] for tupp in seq_arr1]
+    print seq_arr
+    p = pyaudio.PyAudio()
+    aud_data = []
+    for tupp in seq_arr1:
+        aud_data.extend(tupp[3])
+        #print len(tupp[3])
+    #stream = p.open(format=pyaudio.paInt8, channels=1, rate=44100, output=True)
+    #stream.write(str(aud_data))
     #stream.close()
     #p.terminate()
     print "==========================================================================================================================================================================================="
