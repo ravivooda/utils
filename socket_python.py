@@ -6,8 +6,9 @@ import re
 import struct
 import numpy
 import pyaudio
-
-
+import collections
+import wave
+import matplotlib.pyplot as plt
 
 def int_from_bytes(bytes):
     ret = 0
@@ -35,9 +36,9 @@ def parsePacket(dump):
     seq =  int_from_bytes(orig_bytes[:4])
     chk = int_from_bytes(orig_bytes[4:8])
     length = int_from_bytes(orig_bytes[8:12])
-    print "Sequence number: " + str(seq)
+    print "Sequence number: " + str(seq) + "s"
     print "Checksum: " + str(chk)
-    #print "Length: " + str(length)
+    print "Length: " + str(length)
 
     bytes = map(str, orig_bytes)
     d_len = min(length, len(orig_bytes) - 12)
@@ -59,15 +60,18 @@ def parsePacket(dump):
         while i < len_bytes:
             reg_data = int_from_bytes(orig_bytes[i+12:i+16])
             com_chk = com_chk ^ reg_data
-            print "Index: "+str(i)+" Computed for reg_data: " +str(reg_data) +", " + str(com_chk) + ", " + str(com_chk ^ seq)  + "\tfor bytes: "+str(orig_bytes[i+12:i+16])
+            #print "Index: "+str(i)+" Computed for reg_data: " +str(reg_data) +", " + str(com_chk) + ", " + str(com_chk ^ seq)  + "\tfor bytes: "+str(orig_bytes[i+12:i+16])
             i += 4
         com_chk = com_chk ^ seq
         print "COMPUTED CHECKSUM: " + str(com_chk)
         if com_chk == chk:
             print "CHECKSUM MATCH"
+            return True, seq, orig_bytes[12:]
     print "==========================================================================================================================================================================================="
-    return (seq, chk, len(orig_bytes), data)
+    return False, seq, []
+    #return (seq, chk, len(orig_bytes), data)
 
+seq_counts = collections.defaultdict(int)
 def understand():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((sys.argv[1], int(sys.argv[2])))
@@ -89,10 +93,37 @@ def understand():
         if dump.strip(' '):
             i += 1
             check = True
-            dump_arr.append(dump)
+            dump_arr.extend(dump)
         else:
             check = False
-    j = 0
+
+    curr_pointer = 0
+    success = 0
+    fail = 0
+    max_seq_success = 0
+    max_success = 0
+    return_data = []
+    while curr_pointer < len(dump_arr):
+        #seqcnt = int_from_bytes(dump_arr[curr_pointer:curr_pointer+4])
+        #chksum = int_from_bytes(dump_arr[curr_pointer+4:curr_pointer+8])
+        len_arr = map(ord, dump_arr[curr_pointer+8:curr_pointer+12])
+        length = int_from_bytes(len_arr)
+        #data = dump_arr[curr_pointer+12:curr_pointer+12+length]
+        curr_packet = dump_arr[curr_pointer:curr_pointer+length+12]
+        isValid, seq, data = parsePacket(curr_packet)
+        seq_counts[seq] += 1
+        if isValid:
+            success += 1
+            max_seq_success = max(max_seq_success,seq)
+            return_data.append((seq,data))
+        else:
+            fail += 1
+        max_success = max(max_success,seq)
+        curr_pointer += length + 12
+    print "Success: " + str(success) + " Fail: " + str(fail)
+    print "Max success sequence: " + str(max_seq_success) + " Max success: " + str(max_success)
+    return return_data
+    '''j = 0
     valid = 0;
     while j < i:
         dumped = parsePacket(dump_arr[j])
@@ -110,10 +141,30 @@ def understand():
             return seq_arr, valid
     #print seq_arr
     seq_arr = sorted(seq_arr, key=lambda packet:packet[0]) #sort by seq number
-    return seq_arr, valid
+    return seq_arr, valid'''
                 
 if __name__ == "__main__":
-    seq_arr1, valid_items = understand()
+    data = understand()
+    sorted_data = sorted(data,key=lambda x:x[0])
+    print "SORTED DATA"
+    print str([(tupp[0],seq_counts[tupp[0]]) for tupp in sorted_data]) + str(sum(seq_counts.values()))
+    data_merged = []
+    for tupp in sorted_data:
+        data_merged.extend(tupp[1])
+    #print "DATA MERGED: "
+    print data_merged
+    print "TOTAL BYTES OF AUDIO: " + str(len(data_merged))
+    
+    plt.plot(data_merged)
+    plt.show()
+
+    '''p = pyaudio.PyAudio()                                                                            
+    stream = p.open(format=pyaudio.paInt8, channels=2, rate=44100, output=True)                                                                                                                           
+    stream.write(str(data_merged))                                                                                                                                                                           
+    stream.close()                                                                                                                                                                                        
+    p.terminate()'''
+
+    '''seq_arr1, valid_items = understand()
     #seq_arr2 = understand()
     print "SEQ 1"
     #print seq_arr1
@@ -133,5 +184,5 @@ if __name__ == "__main__":
     #print "SEQ 2"
     #print seq_arr2
     #print "==========================================================================================================================================================================================="
-    #print list(set(seq_arr1).intersection(seq_arr2))
+    #print list(set(seq_arr1).intersection(seq_arr2))'''
     
