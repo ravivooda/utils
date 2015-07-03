@@ -23,7 +23,6 @@ def int_from_bytes(bytes):
         third = bytes[2]
     if len(bytes) > 3:
         fourth = bytes[3]
-    #print "Computing for " + str(bytes)
     ret = ret ^ fourth
     ret = ret ^ (third << 8)
     ret = ret ^ (second << 16)
@@ -32,19 +31,19 @@ def int_from_bytes(bytes):
 
 def parsePacket(dump):
     orig_bytes = map(ord, dump)
-    #print orig_bytes
+    print orig_bytes
     seq =  int_from_bytes(orig_bytes[:4])
     chk = int_from_bytes(orig_bytes[4:8])
     length = int_from_bytes(orig_bytes[8:12])
     print "Sequence number: " + str(seq)
     print "Checksum: " + str(chk)
-    print "Length: " + str(length)
+    #print "Length: " + str(length)
 
     bytes = map(str, orig_bytes)
     d_len = min(length, len(orig_bytes) - 12)
     data = b"".join(bytes[12:d_len+12])
 
-    print len(orig_bytes)
+    print "ACTUAL LENGTH OF BYTES RECEIVED: " + str(len(orig_bytes)) + " COMPUTED LENGTH: " + str(length)
     
     valid = False
     if not abs(len(orig_bytes) - length) <= 16 and False:
@@ -53,12 +52,14 @@ def parsePacket(dump):
         valid = True
         com_chk = 0
         i = 0;
-        len_bytes = len(orig_bytes)
+        len_bytes = len(orig_bytes) - 12
         if len_bytes % 4 != 0:
             len_bytes += 4 - (len_bytes % 4)
+        #print "LENGTH FOR CHECKSUM: " + str(len_bytes)
         while i < len_bytes:
             reg_data = int_from_bytes(orig_bytes[i+12:i+16])
             com_chk = com_chk ^ reg_data
+            print "Index: "+str(i)+" Computed for reg_data: " +str(reg_data) +", " + str(com_chk) + ", " + str(com_chk ^ seq)  + "\tfor bytes: "+str(orig_bytes[i+12:i+16])
             i += 4
         com_chk = com_chk ^ seq
         print "COMPUTED CHECKSUM: " + str(com_chk)
@@ -101,11 +102,12 @@ def understand():
         #    continue
         #print "Adding : " + str(dumped[0])
         seq_arr.append(dumped)
-        isValid = True
-        if isValid:
+        if valid < 2:
             #seq_arr.append(dumped)
             valid += 1
-            #return seq_arr, valid
+            print "\n\n\n\n\n\n\n"
+        else:
+            return seq_arr, valid
     #print seq_arr
     seq_arr = sorted(seq_arr, key=lambda packet:packet[0]) #sort by seq number
     return seq_arr, valid
@@ -119,10 +121,10 @@ if __name__ == "__main__":
     seq_arr = [tupp[0] for tupp in seq_arr1]
     print seq_arr
     p = pyaudio.PyAudio()
-    aud_data = []
-    for tupp in seq_arr1:
-        aud_data.extend(tupp[3])
-        #print len(tupp[3])
+    aud_data = [tupp[3] for tupp in seq_arr1]
+    #for tupp in seq_arr1:
+    #    aud_data.extend(tupp[3])
+    #    #print len(tupp[3])
     #stream = p.open(format=pyaudio.paInt8, channels=1, rate=44100, output=True)
     #stream.write(str(aud_data))
     #stream.close()
