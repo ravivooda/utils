@@ -150,8 +150,8 @@ if __name__ == "__main__":
     print str([(tupp[0],seq_counts[tupp[0]]) for tupp in sorted_data]) + str(sum(seq_counts.values()))
     data_merged = []
     for tupp in sorted_data:
-        if tupp[1] > 128:
-            data_merged.extend(tupp[1])
+        #if tupp[1] > 128:
+        data_merged.extend(tupp[1])
     #print "DATA MERGED: "
     morse_string = ""
     for i in data_merged:
