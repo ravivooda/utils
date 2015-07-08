@@ -166,58 +166,38 @@ if __name__ == "__main__":
     print "TOTAL BYTES OF AUDIO: " + str(len(data_merged))
 
     CHUNK = 1024
-    FORMAT = pyaudio.paUInt8
+    FORMAT = pyaudio.paInt16
     CHANNELS = 1
-    RATE = 44100
+    RATE = 11025
     WAVE_OUTPUT_FILENAME = "alien.wav"
     
     p = pyaudio.PyAudio()
     stream = p.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
-                input=True,
-                frames_per_buffer=CHUNK)
+                input=True)#,
+                #frames_per_buffer=CHUNK)
     data_chars = [chr(item) for item in data_merged]
     print int_from_bytes(data_merged[8:12])
 
-    print("* recording")
     wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
     wf.setnchannels(CHANNELS)
     wf.setsampwidth(p.get_sample_size(FORMAT))
     wf.setframerate(RATE)
     wf.writeframes(b''.join(data_chars))
     wf.close()
+
+    bashCommand = "open " + WAVE_OUTPUT_FILENAME
+    import subprocess
+    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
     '''
     plt.plot(data_merged)
     plt.show()
     
     data_chars = [chr(item) for item in data_merged] #if 65 <= item <= 90 or 97 <= item <= 122]
-    print data_chars[:100]
     p = pyaudio.PyAudio()                                                                            
-    stream = p.open(format=pyaudio.paUInt8, channels=2, rate=44100, output=True, input=True)                                                                                                                           
+    stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, output = True)                                                                                                                           
     stream.write(str(data_merged))
     stream.close()                                                                                                                                                                 
     p.terminate()
     '''
-    '''seq_arr1, valid_items = understand()
-    #seq_arr2 = understand()
-    print "SEQ 1"
-    #print seq_arr1
-    print "Number of valid: " + str(valid_items)
-    seq_arr = [tupp[0] for tupp in seq_arr1]
-    print seq_arr
-    p = pyaudio.PyAudio()
-    aud_data = [tupp[3] for tupp in seq_arr1]
-    #for tupp in seq_arr1:
-    #    aud_data.extend(tupp[3])
-    #    #print len(tupp[3])
-    #stream = p.open(format=pyaudio.paInt8, channels=1, rate=44100, output=True)
-    #stream.write(str(aud_data))
-    #stream.close()
-    #p.terminate()
-    print "==========================================================================================================================================================================================="
-    #print "SEQ 2"
-    #print seq_arr2
-    #print "==========================================================================================================================================================================================="
-    #print list(set(seq_arr1).intersection(seq_arr2))'''
-    
