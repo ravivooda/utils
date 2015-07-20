@@ -14,6 +14,9 @@
 		976A00781B5BA17E007F6C78 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 976A00771B5BA17E007F6C78 /* Images.xcassets */; };
 		976A007B1B5BA17E007F6C78 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 976A00791B5BA17E007F6C78 /* LaunchScreen.xib */; };
 		976A00871B5BA17E007F6C78 /* Photo_CarouselTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 976A00861B5BA17E007F6C78 /* Photo_CarouselTests.m */; };
+		976A00911B5BA3F3007F6C78 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 976A00901B5BA3F3007F6C78 /* AssetsLibrary.framework */; };
+		976A00931B5BA818007F6C78 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 976A00921B5BA818007F6C78 /* QuartzCore.framework */; };
+		976A00971B5BAE21007F6C78 /* UIView+ViewHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = 976A00961B5BAE21007F6C78 /* UIView+ViewHierarchy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,10 @@
 		976A00801B5BA17E007F6C78 /* Photo CarouselTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Photo CarouselTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		976A00851B5BA17E007F6C78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		976A00861B5BA17E007F6C78 /* Photo_CarouselTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Photo_CarouselTests.m; sourceTree = "<group>"; };
+		976A00901B5BA3F3007F6C78 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		976A00921B5BA818007F6C78 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		976A00951B5BAE21007F6C78 /* UIView+ViewHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewHierarchy.h"; sourceTree = "<group>"; };
+		976A00961B5BAE21007F6C78 /* UIView+ViewHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewHierarchy.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				976A00931B5BA818007F6C78 /* QuartzCore.framework in Frameworks */,
+				976A00911B5BA3F3007F6C78 /* AssetsLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +72,8 @@
 		976A005E1B5BA17E007F6C78 = {
 			isa = PBXGroup;
 			children = (
+				976A00921B5BA818007F6C78 /* QuartzCore.framework */,
+				976A00901B5BA3F3007F6C78 /* AssetsLibrary.framework */,
 				976A00691B5BA17E007F6C78 /* Photo Carousel */,
 				976A00831B5BA17E007F6C78 /* Photo CarouselTests */,
 				976A00681B5BA17E007F6C78 /* Products */,
@@ -81,6 +92,7 @@
 		976A00691B5BA17E007F6C78 /* Photo Carousel */ = {
 			isa = PBXGroup;
 			children = (
+				976A00941B5BADA3007F6C78 /* Categories */,
 				976A006E1B5BA17E007F6C78 /* AppDelegate.h */,
 				976A006F1B5BA17E007F6C78 /* AppDelegate.m */,
 				976A00711B5BA17E007F6C78 /* ViewController.h */,
@@ -117,6 +129,15 @@
 				976A00851B5BA17E007F6C78 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		976A00941B5BADA3007F6C78 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				976A00951B5BAE21007F6C78 /* UIView+ViewHierarchy.h */,
+				976A00961B5BAE21007F6C78 /* UIView+ViewHierarchy.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,6 +243,7 @@
 				976A00731B5BA17E007F6C78 /* ViewController.m in Sources */,
 				976A00701B5BA17E007F6C78 /* AppDelegate.m in Sources */,
 				976A006D1B5BA17E007F6C78 /* main.m in Sources */,
+				976A00971B5BAE21007F6C78 /* UIView+ViewHierarchy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  UIView+ViewHierarchy.h
 //  Photo Carousel
 //
 //  Created by Ravi Vooda on 7/19/15.
@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AssetsLibrary/AssetsLibrary.h>
 
-@interface ViewController : UIViewController
+@interface UIView (ViewHierarchy)
+
+-(void)removeAllSubviews;
 
 @end
-

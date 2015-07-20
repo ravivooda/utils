@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>70730984-C8CB-4BF3-94BA-EF27EB8C809D</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>Photo Carousel</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>20A50312A9B6D8040B929FB92993748F796889C8</key>
 		<string>https://github.com/ravivooda/utils.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>adobe/Photo Carousel/Photo Carousel.xcodeproj/project.xcworkspace</string>
+	<string>adobe/Photo Carousel/Photo Carousel.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>20A50312A9B6D8040B929FB92993748F796889C8</key>
