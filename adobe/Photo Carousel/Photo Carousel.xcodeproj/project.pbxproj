@@ -17,6 +17,8 @@
 		976A00911B5BA3F3007F6C78 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 976A00901B5BA3F3007F6C78 /* AssetsLibrary.framework */; };
 		976A00931B5BA818007F6C78 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 976A00921B5BA818007F6C78 /* QuartzCore.framework */; };
 		976A00971B5BAE21007F6C78 /* UIView+ViewHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = 976A00961B5BAE21007F6C78 /* UIView+ViewHierarchy.m */; };
+		976A009A1B5DECB2007F6C78 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 976A00991B5DECB2007F6C78 /* checkmark@2x.png */; };
+		976A009E1B5DED3C007F6C78 /* PCImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 976A009D1B5DED3C007F6C78 /* PCImageView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,9 @@
 		976A00921B5BA818007F6C78 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		976A00951B5BAE21007F6C78 /* UIView+ViewHierarchy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewHierarchy.h"; sourceTree = "<group>"; };
 		976A00961B5BAE21007F6C78 /* UIView+ViewHierarchy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewHierarchy.m"; sourceTree = "<group>"; };
+		976A00991B5DECB2007F6C78 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
+		976A009C1B5DED3C007F6C78 /* PCImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCImageView.h; sourceTree = "<group>"; };
+		976A009D1B5DED3C007F6C78 /* PCImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCImageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +97,8 @@
 		976A00691B5BA17E007F6C78 /* Photo Carousel */ = {
 			isa = PBXGroup;
 			children = (
+				976A009B1B5DED23007F6C78 /* Views */,
+				976A00981B5DECA4007F6C78 /* Images */,
 				976A00941B5BADA3007F6C78 /* Categories */,
 				976A006E1B5BA17E007F6C78 /* AppDelegate.h */,
 				976A006F1B5BA17E007F6C78 /* AppDelegate.m */,
@@ -138,6 +145,23 @@
 				976A00961B5BAE21007F6C78 /* UIView+ViewHierarchy.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		976A00981B5DECA4007F6C78 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				976A00991B5DECB2007F6C78 /* checkmark@2x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		976A009B1B5DED23007F6C78 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				976A009C1B5DED3C007F6C78 /* PCImageView.h */,
+				976A009D1B5DED3C007F6C78 /* PCImageView.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,6 +246,7 @@
 			files = (
 				976A00761B5BA17E007F6C78 /* Main.storyboard in Resources */,
 				976A007B1B5BA17E007F6C78 /* LaunchScreen.xib in Resources */,
+				976A009A1B5DECB2007F6C78 /* checkmark@2x.png in Resources */,
 				976A00781B5BA17E007F6C78 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +267,7 @@
 			files = (
 				976A00731B5BA17E007F6C78 /* ViewController.m in Sources */,
 				976A00701B5BA17E007F6C78 /* AppDelegate.m in Sources */,
+				976A009E1B5DED3C007F6C78 /* PCImageView.m in Sources */,
 				976A006D1B5BA17E007F6C78 /* main.m in Sources */,
 				976A00971B5BAE21007F6C78 /* UIView+ViewHierarchy.m in Sources */,
 			);
@@ -438,6 +464,7 @@
 				976A008C1B5BA17E007F6C78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		976A008D1B5BA17E007F6C78 /* Build configuration list for PBXNativeTarget "Photo CarouselTests" */ = {
 			isa = XCConfigurationList;
@@ -446,6 +473,7 @@
 				976A008F1B5BA17E007F6C78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

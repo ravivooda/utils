@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "UIView+ViewHierarchy.h"
+#import "PCImageView.h"
 
 @interface ViewController () <UIScrollViewDelegate> {
     CGFloat width;
@@ -24,6 +25,8 @@
 @property (strong, nonatomic) UIButton *countButton;
 @property (strong, nonatomic) UIScrollView *photosScrollView;
 
+@property (nonatomic) int num_selected;
+
 @end
 
 @implementation ViewController
@@ -33,6 +36,7 @@ const int num_preload = 3;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.num_selected = 0;
     
     self.photosScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 90)];
     [self.photosScrollView setDelegate:self];
@@ -47,6 +51,7 @@ const int num_preload = 3;
     [self.countButton setCenter:CGPointMake(self.view.center.x, (self.view.frame.size.height + CGRectGetMaxY(self.photosScrollView.frame)) / 2)];
     [self.countButton setBackgroundColor:[UIColor blueColor]];
     [self.countButton.layer setCornerRadius:4.0f];
+    [self.countButton addTarget:self action:@selector(countTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:self.photosScrollView];
     [self.view addSubview:self.photoAccessErrorLabel];
@@ -114,11 +119,20 @@ const int num_preload = 3;
     [self.photosScrollView setContentSize:contentSize];
     [self.photosScrollView setContentOffset:CGPointMake((size - 1) * width + size * padding, 0) animated:YES];
     
+    __weak ViewController *weakSelf = self;
+    
     for (NSUInteger i = 0; i < [self.imageUrls count]; i++) {
-        UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake((i+1)*padding + i * width, padding, width, height)];
+        PCImageView *photoImageView = [[PCImageView alloc] initWithFrame:CGRectMake((i+1)*padding + i * width, padding, width, height)];
         [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
         [self.photosScrollView addSubview:photoImageView];
         [images addObject:[NSNull null]];
+        [photoImageView setUserTouchedCallBack:^(BOOL isSelected) {
+            if (isSelected) {
+                weakSelf.num_selected++;
+            } else {
+                weakSelf.num_selected--;
+            }
+        }];
     }
     NSLog(@"Num photos added: %ld", size);
 }
@@ -143,6 +157,11 @@ const int num_preload = 3;
             }];
         }
     }
+}
+
+-(void)countTapped:(UIButton*)sender {
+    UIAlertView *alertSelectedCount = [[UIAlertView alloc] initWithTitle:@"Selected images count" message:[NSString stringWithFormat:@"%d",self.num_selected] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+    [alertSelectedCount show];
 }
 
 #pragma mark - Scroll View Delegate Methods
