@@ -148,7 +148,7 @@ const int num_preload = 3;
         UIImage *loadedImage = images[i];
         if (!loadedImage || [loadedImage isKindOfClass:[NSNull class]]) {
             [self.assetsLibrary assetForURL:self.imageUrls[i] resultBlock:^(ALAsset *asset) {
-                NSLog(@"Fetched image at %ld", index);
+                NSLog(@"Fetched image at %ld", i);
                 UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage] scale:1.0f orientation:UIImageOrientationUp];
                 [images setObject:image atIndexedSubscript:i];
                 [imageView setImage:image];
@@ -169,6 +169,25 @@ const int num_preload = 3;
     CGPoint offset = scrollView.contentOffset;
     NSUInteger index = offset.x / (width + padding);
     [self demandLoadAtIndex:index];
+    
+    // Set Frame for checkmark at i - 1
+    if (index - 1 > 0) {
+        PCImageView *imageView = [self.photosScrollView subviews][index-1];
+        CGRect relativeRect = [self.view convertRect:imageView.frame fromView:self.photosScrollView];
+        [imageView setX:self.view.frame.size.width - relativeRect.origin.x];
+    }
+    
+    // Set Frame for checkmark at i
+    PCImageView *imageView = [self.photosScrollView subviews][index];
+    CGRect relativeRect = [self.view convertRect:imageView.frame fromView:self.photosScrollView];
+    [imageView setX:self.view.frame.size.width - relativeRect.origin.x];
+    
+    // Set Frame for checkmark at i + 1
+    if (index + 1 < [self.imageUrls count]) {
+        PCImageView *imageView = [self.photosScrollView subviews][index+1];
+        CGRect relativeRect = [self.view convertRect:imageView.frame fromView:self.photosScrollView];
+        [imageView setX:self.view.frame.size.width - relativeRect.origin.x];
+    }
 }
 
 @end

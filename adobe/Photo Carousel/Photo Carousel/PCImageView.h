@@ -10,8 +10,10 @@
 
 @interface PCImageView : UIImageView
 
+@property (strong, nonatomic) UIImageView *checkImageView;
 @property (nonatomic) BOOL isSelected;
 
+-(void)setX:(CGFloat)x;
 -(void)setUserTouchedCallBack:(void(^)(BOOL isSelected))callback;
 
 @end

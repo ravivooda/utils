@@ -11,7 +11,8 @@
 @interface PCImageView ()
 
 @property (nonatomic, copy) void (^completion)(BOOL isSelected);
-@property (strong, nonatomic) UIImageView *checkImageView;
+@property (nonatomic) CGRect unmovedFrame;
+@property (nonatomic) CGRect movedFrame;
 
 @end
 
@@ -36,6 +37,10 @@ const int padding = 5;
 -(void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     [self.checkImageView setCenter:CGPointMake(frame.size.width - (self.checkImageView.frame.size.width)/2 - padding, frame.size.height - self.checkImageView.frame.size.height)];
+    self.unmovedFrame = self.checkImageView.frame;
+    CGRect frm = self.checkImageView.frame;
+    frm.origin.x = padding;
+    self.movedFrame = frm;
 }
 
 -(void)setIsSelected:(BOOL)isSelected {
@@ -49,6 +54,21 @@ const int padding = 5;
 
 -(void)setUserTouchedCallBack:(void (^)(BOOL))callback {
     self.completion = callback;
+}
+
+-(void)setX:(CGFloat)x {
+    if (x < self.frame.size.width && x > 0) {
+        CGFloat allowed = padding + self.checkImageView.frame.size.width;
+        if (x > allowed) {
+            CGRect cal_frame = self.unmovedFrame;
+            cal_frame.origin.x = x - allowed;
+            [self.checkImageView setFrame:cal_frame];
+        } else {
+            [self.checkImageView setFrame:self.movedFrame];
+        }
+    } else {
+        [self.checkImageView setFrame:self.unmovedFrame];
+    }
 }
 
 -(void)tapCallBack:(UITapGestureRecognizer*)recognizer {
