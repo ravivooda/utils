@@ -40,7 +40,7 @@ const int num_preload = 3;
     // Do any additional setup after loading the view, typically from a nib.
     self.num_selected = 0;
     
-    self.photosScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 200)];
+    self.photosScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 400)];
     [self.photosScrollView setDelegate:self];
     
     // Creating Photo Access Error Label
@@ -128,10 +128,6 @@ const int num_preload = 3;
         PCURL *url = self.imageUrls[i];
         CGFloat width_image = url.size.width * height / url.size.height;
         PCImageView *photoImageView = [[PCImageView alloc] initWithFrame:CGRectMake(padding + width_scroll, padding, width_image, height)];
-        UILabel * countLabel = [[UILabel alloc] initWithFrame:photoImageView.bounds];
-        [countLabel setTextAlignment:NSTextAlignmentCenter];
-        [countLabel setText:[NSString stringWithFormat:@"%d",(int)i]];
-        [photoImageView addSubview:countLabel];
         width_scroll += width_image + padding;
         [self.widthMap addObject:[NSNumber numberWithFloat:width_scroll]];
         [photoImageView setContentMode:UIViewContentModeScaleAspectFill];
@@ -185,7 +181,7 @@ const int num_preload = 3;
 
 #pragma mark - Scroll View Delegate Methods
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat offset = scrollView.contentOffset.x;
+    CGFloat offset = scrollView.contentOffset.x + self.view.frame.size.width;
     NSUInteger index = 0;
     for (int i = 1; i < [self.widthMap count]; i++) {
         if (offset < [self.widthMap[i] floatValue] && offset > [self.widthMap[i-1] floatValue]) {
