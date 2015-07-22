@@ -9,9 +9,9 @@
 #import "ViewController.h"
 #import "UIView+ViewHierarchy.h"
 #import "PCImageView.h"
+#import "PCURL.h"
 
 @interface ViewController () <UIScrollViewDelegate> {
-    CGFloat width;
     CGFloat padding;
     CGFloat height;
     NSMutableArray *images;
@@ -27,6 +27,8 @@
 
 @property (nonatomic) int num_selected;
 
+@property (strong, nonatomic) NSDictionary *widthMap;
+
 @end
 
 @implementation ViewController
@@ -38,13 +40,14 @@ const int num_preload = 3;
     // Do any additional setup after loading the view, typically from a nib.
     self.num_selected = 0;
     
-    self.photosScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 90)];
+    self.photosScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 200)];
     [self.photosScrollView setDelegate:self];
     
     // Creating Photo Access Error Label
     self.photoAccessErrorLabel = [[UILabel alloc] initWithFrame:self.view.frame];
     [self.photoAccessErrorLabel setNumberOfLines:0];
     [self.photoAccessErrorLabel setText:@"Sorry! But you have not yet enabled access to photo. \n\nPlease go to ( Settings > Photo Carousel ) to enable access"];
+    [self.photoAccessErrorLabel setTextAlignment:NSTextAlignmentCenter];
     
     self.countButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
     [self.countButton setTitle:@"Count" forState:UIControlStateNormal];
@@ -87,9 +90,10 @@ const int num_preload = 3;
         if (group && group.numberOfAssets > 0) {
             [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
                 if (result) {
-                    NSURL *image_url = [[result defaultRepresentation] url]; //[[UIImage alloc] initWithCGImage:[result thumbnail]];//[UIImage imageWithCGImage:[[result defaultRepresentation] fullScreenImage]];
-                    NSLog(@"Loaded image: %d", (int)index);
-                    if (image_url) {
+                    ALAssetRepresentation* representation = [result defaultRepresentation];
+                    if (representation) {
+                        PCURL *image_url = [[PCURL alloc] initWithString:representation.url.absoluteString];
+                        [image_url setSize:representation.dimensions];
                         [weakSelf.imageUrls addObject:image_url];
                     }
                 }
@@ -111,19 +115,26 @@ const int num_preload = 3;
     
     padding = 10;
     height = self.photosScrollView.frame.size.height;
-    width = self.photosScrollView.frame.size.width - 50;
     
     NSUInteger size = [self.imageUrls count];
     images = [[NSMutableArray alloc] initWithCapacity:size];
-    CGSize contentSize = CGSizeMake(size * width + (size + 1) * padding, height);
-    [self.photosScrollView setContentSize:contentSize];
-    [self.photosScrollView setContentOffset:CGPointMake((size - 1) * width + size * padding, 0) animated:YES];
+    self.widthMap = [[NSMutableDictionary alloc] initWithCapacity:size];
+    
+    CGFloat width_scroll = 0;
     
     __weak ViewController *weakSelf = self;
     
     for (NSUInteger i = 0; i < [self.imageUrls count]; i++) {
-        PCImageView *photoImageView = [[PCImageView alloc] initWithFrame:CGRectMake((i+1)*padding + i * width, padding, width, height)];
-        [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
+        PCURL *url = self.imageUrls[i];
+        CGFloat width_image = url.size.width * height / url.size.height;
+        PCImageView *photoImageView = [[PCImageView alloc] initWithFrame:CGRectMake(padding + width_scroll, padding, width_image, height)];
+        UILabel * countLabel = [[UILabel alloc] initWithFrame:photoImageView.bounds];
+        [countLabel setTextAlignment:NSTextAlignmentCenter];
+        [countLabel setText:[NSString stringWithFormat:@"%d",(int)i]];
+        [photoImageView addSubview:countLabel];
+        width_scroll += width_image + padding;
+        [photoImageView setContentMode:UIViewContentModeScaleAspectFill];
+        [photoImageView setClipsToBounds:YES];
         [self.photosScrollView addSubview:photoImageView];
         [images addObject:[NSNull null]];
         [photoImageView setUserTouchedCallBack:^(BOOL isSelected) {
@@ -134,12 +145,19 @@ const int num_preload = 3;
             }
         }];
     }
+    
+    if ([self.imageUrls count] > 0) {
+        width_scroll += padding;
+    }
+    
+    [self.photosScrollView setContentSize:CGSizeMake(width_scroll, self.photosScrollView.frame.size.height)];
+    //[self.photosScrollView setContentOffset:CGPointMake((size - 1) * width + size * padding, 0) animated:YES];
     NSLog(@"Num photos added: %ld", size);
 }
 
 -(void) demandLoadAtIndex:(NSUInteger)index {
     NSLog(@"Loading at index: %ld", index);
-    for (NSUInteger i = index; i > MAX(index - num_preload,0); i--) {
+    for (NSUInteger i = index; i >= MAX((int)index - num_preload,0) && i < [self.imageUrls count]; i--) {
         UIImageView *imageView = [self.photosScrollView subviews][i];
         if (!imageView) {
             NSLog(@"No Image View yet");
@@ -171,7 +189,7 @@ const int num_preload = 3;
     [self demandLoadAtIndex:index];
     
     // Set Frame for checkmark at i - 1
-    if (index - 1 > 0) {
+    if ((int)index - 1 > 0) {
         PCImageView *imageView = [self.photosScrollView subviews][index-1];
         CGRect relativeRect = [self.view convertRect:imageView.frame fromView:self.photosScrollView];
         [imageView setX:self.view.frame.size.width - relativeRect.origin.x];
@@ -183,7 +201,7 @@ const int num_preload = 3;
     [imageView setX:self.view.frame.size.width - relativeRect.origin.x];
     
     // Set Frame for checkmark at i + 1
-    if (index + 1 < [self.imageUrls count]) {
+    if ((int)index + 1 < [self.imageUrls count]) {
         PCImageView *imageView = [self.photosScrollView subviews][index+1];
         CGRect relativeRect = [self.view convertRect:imageView.frame fromView:self.photosScrollView];
         [imageView setX:self.view.frame.size.width - relativeRect.origin.x];

@@ -19,6 +19,7 @@
 		976A00971B5BAE21007F6C78 /* UIView+ViewHierarchy.m in Sources */ = {isa = PBXBuildFile; fileRef = 976A00961B5BAE21007F6C78 /* UIView+ViewHierarchy.m */; };
 		976A009A1B5DECB2007F6C78 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 976A00991B5DECB2007F6C78 /* checkmark@2x.png */; };
 		976A009E1B5DED3C007F6C78 /* PCImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 976A009D1B5DED3C007F6C78 /* PCImageView.m */; };
+		976A00A21B5E9AD5007F6C78 /* PCURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 976A00A11B5E9AD5007F6C78 /* PCURL.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,8 @@
 		976A00991B5DECB2007F6C78 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
 		976A009C1B5DED3C007F6C78 /* PCImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCImageView.h; sourceTree = "<group>"; };
 		976A009D1B5DED3C007F6C78 /* PCImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCImageView.m; sourceTree = "<group>"; };
+		976A00A01B5E9AD5007F6C78 /* PCURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCURL.h; sourceTree = "<group>"; };
+		976A00A11B5E9AD5007F6C78 /* PCURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCURL.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +100,7 @@
 		976A00691B5BA17E007F6C78 /* Photo Carousel */ = {
 			isa = PBXGroup;
 			children = (
+				976A009F1B5E9AB5007F6C78 /* Models */,
 				976A009B1B5DED23007F6C78 /* Views */,
 				976A00981B5DECA4007F6C78 /* Images */,
 				976A00941B5BADA3007F6C78 /* Categories */,
@@ -162,6 +166,15 @@
 				976A009D1B5DED3C007F6C78 /* PCImageView.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		976A009F1B5E9AB5007F6C78 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				976A00A01B5E9AD5007F6C78 /* PCURL.h */,
+				976A00A11B5E9AD5007F6C78 /* PCURL.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,6 +278,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				976A00A21B5E9AD5007F6C78 /* PCURL.m in Sources */,
 				976A00731B5BA17E007F6C78 /* ViewController.m in Sources */,
 				976A00701B5BA17E007F6C78 /* AppDelegate.m in Sources */,
 				976A009E1B5DED3C007F6C78 /* PCImageView.m in Sources */,
