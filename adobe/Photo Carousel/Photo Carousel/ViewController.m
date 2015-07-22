@@ -27,7 +27,7 @@
 
 @property (nonatomic) int num_selected;
 
-@property (strong, nonatomic) NSDictionary *widthMap;
+@property (strong, nonatomic) NSMutableArray *widthMap;
 
 @end
 
@@ -118,8 +118,8 @@ const int num_preload = 3;
     
     NSUInteger size = [self.imageUrls count];
     images = [[NSMutableArray alloc] initWithCapacity:size];
-    self.widthMap = [[NSMutableDictionary alloc] initWithCapacity:size];
-    
+    self.widthMap = [[NSMutableArray alloc] initWithCapacity:size];
+    [self.widthMap addObject:@0];
     CGFloat width_scroll = 0;
     
     __weak ViewController *weakSelf = self;
@@ -133,6 +133,7 @@ const int num_preload = 3;
         [countLabel setText:[NSString stringWithFormat:@"%d",(int)i]];
         [photoImageView addSubview:countLabel];
         width_scroll += width_image + padding;
+        [self.widthMap addObject:[NSNumber numberWithFloat:width_scroll]];
         [photoImageView setContentMode:UIViewContentModeScaleAspectFill];
         [photoImageView setClipsToBounds:YES];
         [self.photosScrollView addSubview:photoImageView];
@@ -184,9 +185,15 @@ const int num_preload = 3;
 
 #pragma mark - Scroll View Delegate Methods
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGPoint offset = scrollView.contentOffset;
-    NSUInteger index = offset.x / (width + padding);
-    [self demandLoadAtIndex:index];
+    CGFloat offset = scrollView.contentOffset.x;
+    NSUInteger index = 0;
+    for (int i = 1; i < [self.widthMap count]; i++) {
+        if (offset < [self.widthMap[i] floatValue] && offset > [self.widthMap[i-1] floatValue]) {
+            index = i - 1;
+            break;
+        }
+    }
+    [self demandLoadAtIndex:index + 1];
     
     // Set Frame for checkmark at i - 1
     if ((int)index - 1 > 0) {
