@@ -6,6 +6,9 @@ from keys import keys
 import time
 import json
 
+import sys
+sys.stdout = open("results.txt", "w")
+
 def pretty_print(dict):
     print json.dumps(dict, sort_keys=True, indent=4)
  
@@ -45,6 +48,7 @@ while len(follow_q) != 0:
     print "Searching for: " + str(follower_name)
     for new_follower in tweepy.Cursor(api.followers_ids, id=follower_name).pages():
         for new_follower_id in new_follower:
+            sys.stdout.flush()
             if new_follower_id == me.id: # api.exists_friendship(me,new_follower_id):
                 print "Already friends: " + str(new_follower_id)
                 continue
