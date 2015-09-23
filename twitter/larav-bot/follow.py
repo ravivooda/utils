@@ -43,22 +43,28 @@ i = 0;
 me = api.me()
 print me
 while len(follow_q) != 0:
-    follower_name = follow_q[0]
-    print "\n\n Batch: " + str(i)
-    print "Searching for: " + str(follower_name)
-    for new_follower in tweepy.Cursor(api.followers_ids, id=follower_name).pages():
-        for new_follower_id in new_follower:
-            sys.stdout.flush()
-            if new_follower_id == me.id: # api.exists_friendship(me,new_follower_id):
-                print "Already friends: " + str(new_follower_id)
-                continue
-            try:
-                api.create_friendship(new_follower_id)
-                print "Success Man"
-            except tweepy.TweepError as e:
-                print e
-            print new_follower_id
-            follow_q.append(new_follower_id)
-            time.sleep(10)
-    follow_q.pop(0)
-    i = i+1
+    try:
+        follower_name = follow_q[0]
+        print "\n\n Batch: " + str(i)
+        print "Searching for: " + str(follower_name)
+        for new_follower in tweepy.Cursor(api.followers_ids, id=follower_name).pages():
+            for new_follower_id in new_follower:
+                sys.stdout.flush()
+                if new_follower_id == me.id: # api.exists_friendship(me,new_follower_id):
+                    print "Just me: " + str(new_follower_id)
+                    continue
+
+                print api.show_friendship(target_id=new_follower_id)
+                try:
+                    api.create_friendship(new_follower_id)
+                    print "Success Man"
+                except tweepy.TweepError as e:
+                    print e
+                print new_follower_id
+                follow_q.append(new_follower_id)
+                time.sleep(60)
+        follow_q.pop(0)
+        i = i+1
+    except Exception as e:
+        print e
+print "Reached the end of the follow_q. Its empty"
