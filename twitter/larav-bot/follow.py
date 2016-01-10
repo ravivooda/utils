@@ -7,7 +7,7 @@ import time
 import json
 
 import sys
-sys.stdout = open("results.txt", "w")
+#sys.stdout = open("results.txt", "w")
 
 def pretty_print(dict):
     print json.dumps(dict, sort_keys=True, indent=4)
@@ -28,18 +28,19 @@ pretty_print(api.rate_limit_status())
 
 follow_q = []
  
-# First get my ollowers
-for follower in tweepy.Cursor(api.followers).items():
-    my_follower_name = follower.id
-    follow_q.append(my_follower_name)
+# First get my followers
+try:
+    for follower in tweepy.Cursor(api.followers).items():
+        my_follower_name = follower.id
+        follow_q.append(my_follower_name)
+except tweepy.TweepError:
+    print "Rate limit exceeded. So just putting in my id: " + str(api.me().id)
+    follow_q.append(api.me().id)
 
-print "My Followers are: "
+followed_q = {}
 
-print follow_q
-
-print "\n\n\n\n\n ====================================== \n\n\n\n\n"
-
-i = 0; 
+i = 0;
+j = 0;
 me = api.me()
 print me
 while len(follow_q) != 0:
@@ -49,6 +50,16 @@ while len(follow_q) != 0:
         print "Searching for: " + str(follower_name)
         for new_follower in tweepy.Cursor(api.followers_ids, id=follower_name).pages():
             for new_follower_id in new_follower:
+                print "\n\n Found user: " + new_follower_id
+                print "Follow Queue List: " + str(len(follow_q))
+                print "Followed by bot List: " + str(len(followed_q))
+
+                if new_follower_id in followed_q:
+                    print "Already found in the queue: " + new_follower + "\n\n\n"
+                    continue
+                    
+                followed_q[new_follower_id] = True
+                
                 sys.stdout.flush()
                 if new_follower_id == me.id: # api.exists_friendship(me,new_follower_id):
                     print "Just me: " + str(new_follower_id)
@@ -67,4 +78,6 @@ while len(follow_q) != 0:
         i = i+1
     except Exception as e:
         print e
+        print "Error occurred sleeping for 3 mins\n\n\nn"
+        time.sleep(10)
 print "Reached the end of the follow_q. Its empty"
