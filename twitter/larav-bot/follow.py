@@ -71,7 +71,7 @@ while len(follow_q) != 0:
                 except tweepy.TweepError as e:
                     logging.error("Unable to follow user: " + new_follower_id)
                     logging.error(e)
-                    l++;
+                    l=l+1;
                 if new_follower_id not in follow_q:
                     logging.info("Added current user: " + new_follower_id + " to my queue")
                     follow_q.append(new_follower_id)
