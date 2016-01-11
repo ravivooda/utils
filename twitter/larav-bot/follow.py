@@ -4,13 +4,17 @@ import Queue
 import logging
 from keys import keys
 
+import threading
 import time
 import json
 
 import requests.packages.urllib3
 
+import ereport
 
-logging.basicConfig(filename='log.txt',level=logging.DEBUG)
+
+
+logging.basicConfig(filename='bot.log',level=logging.DEBUG)
 
 # DISABLE OTHER USELESS LOGGING
 logging.getLogger("requests").setLevel(logging.CRITICAL)
@@ -58,6 +62,28 @@ z = 0;
 l = 0;
 me = api.me()
 logging.info("Well this is my data: " + str(me) + "\n\n")
+
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+# mail logger
+mlogger = logging.getLogger('mail_logger')
+hdlr = logging.FileHandler('mail.log')
+hdlr.setFormatter(formatter)
+mlogger.addHandler(hdlr)
+
+def send_stats():
+    message = "Batch Count: " + str(i) + "\n"
+    message+= "Followers touched: " + str(j) + "\n"
+    message+= "Bot retouched: " + str(z) + "\n"
+    message+= "Error occurred: " + str(l) + "\n"
+    if ereport.send_email(message=message):
+        mlogger.info("Mail was sent successfully")
+    else:
+        mlogger.error("MAIL FAILED!!!")
+    threading.Timer(10, send_stats).start()
+    mlogger.info("Sleeping now")
+
+send_stats()
+    
 
 logging.info("Starting the actual bot")
 while len(follow_q) != 0:
