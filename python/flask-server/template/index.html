@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="template/css/style.css">
+
+    <!--Javascript Libraries-->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8e8AhW7_bXKYwTOjwXfZ31drAydxC00I&libraries=places"></script>
+    <script>
+	var autocomplete;
+	function initialize(){
+		// Create the autocomplete object, restricting the search
+		// to geographical location types.
+  		autocomplete = new google.maps.places.Autocomplete((document.getElementById('search')),{ types: ['address'] });
+  		// When the user selects an address from the dropdown,
+ 		// populate the address fields in the form.
+  		google.maps.event.addListener(autocomplete, 'place_changed', function() {
+    			fillInAddress();
+ 	 	});
+	}
+
+	function fillInAddress(){
+		alert(autocomplete.getPlace());
+	}
+    </script>
+    <style>
+	#header {
+		height: 50px;
+		width: 100%;
+		background: red;
+	}
+	
+	#header-block {
+		float:left;
+		overflow:hidden;
+	}
+	
+	#new {
+		overflow:hidden;
+		float:right;
+	}
+    </style>
+  </head>
+
+  <body onload="initialize()">
+
+    <div id="header">
+      <div id="header-block">
+      </div>
+      <div id="new">
+	<a href="new">
+		+ NEW
+	</a>
+      </div>
+    </div>
+    
+    <div id="content">
+      <div id="main-search">
+	<form action="search" style="display:inline;">
+	  <input id="search" type="text" name="t"><br>
+	</form>
+      </div>
+    </div>
+
+    <div id="footer">
+      &copy; Ravi Vooda
+    </div>
+  </body>
+</html>

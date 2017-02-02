@@ -1,0 +1,61 @@
+#footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
+#content{
+    height: 100%;
+    position: relative;
+    text-align: center;
+}
+
+#main-search{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#search{
+    width: 350px;
+}
+
+
+/*
+  Styles for the Google Search Box
+*/
+.pac-item{
+    font-size: 20px;
+}
+.pac-item > * {
+    font-size: 20px;
+}
+
+
+/*
+  House Detail Item
+*/
+.house-item {
+    padding: 20px 0px;
+}
+
+.house-item-title {
+    text-align: left;
+    /*padding-left: 50px;*/
+    padding: 0;
+}
+
+.house-item-input {
+    width: 650px;
+    float: left;
+}
+
+.submit-button {
+    color: white;
+    font-size: 15px;
+    padding: 5px 20px;
+    background: red;
+    margin-top: 20px;
+}

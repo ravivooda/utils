@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="template/css/style.css">
+    <style>
+      	div#new-form{
+		width: 700px;
+		text-align: center;
+		padding: 50px 20px;
+		margin: 0 auto;
+	}
+    </style>
+    <script src="template/js/actions.js">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div id="new-form">
+      <div class="house-item">
+	<p class="house-item-title">
+	  Address of the listing
+	</p>
+	<input type="text" id="house-address" class="house-item-input" placeholder="Address of listings."/>
+      </div>
+
+      <div class="house-item">
+	<p class="house-item-title">
+	  Best memory
+	</p>
+	<textarea rows="3" cols="100" id="house-b-memory" class="house-item-input" placeholder="Whats your best memory in this house?"></textarea>
+      </div>
+
+      <div class="house-item">
+	<p class="house-item-title">
+	  Details
+	</p>
+	<textarea rows="5" cols="100" id="house-details" class="house-item-input" placeholder="Describe the apartment in your best words."></textarea>
+      </div>
+
+      <div class="house-item">
+	<p class="house-item-title">
+	  Amenities
+	</p>
+	<textarea rows="2" cols="100" id="house-amenities" class="house-item-input" placeholder="What amenities are included? Ex. Refridgerator, Cutains, Microwave etc."></textarea>
+      </div>
+
+      <div class="house-item">
+	<p class="house-item-title">
+	  Public Transport
+	</p>
+	<textarea rows="2" cols="100" id="house-p-transport" class="house-item-input" placeholder="Nearest Public Transport. Best amongst them?"></textarea>
+      </div>
+
+      <div class="house-item">
+	<p class="house-item-title">
+	  Parking
+	</p>
+	<textarea rows="2" cols="100" id="house-parking" class="house-item-input" placeholder="Parking in the house? Nearest parking lot? How's the street parking? Guest parking?"></textarea>
+      </div>
+
+      <div class="house-item">
+	<p class="house-item-title">
+	  Cautions
+	</p>
+	<textarea rows="2" cols="100" id="house-cautions" class="house-item-input" placeholder="Cautions to be noticed."></textarea>
+      </div>
+
+      <div class="house-item">
+	<p class="house-item-title">
+	  Pros
+	</p>
+	<textarea rows="2" cols="100" id="house-pros" class="house-item-input" placeholder="Positives about the house."></textarea>
+      </div>
+
+      <div class="house-item">
+	<p class="house-item-title">
+	  Cons
+	</p>
+	<textarea rows="2" cols="100" id="house-cons" class="house-item-input" placeholder="Contras to be noticed."></textarea>
+      </div>
+
+      <button id="submit-button" type="button" class="submit-button" onclick="addNewListing()">Add Listing</button>
+
+    </div>
+  </body>
+</html>
