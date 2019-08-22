@@ -1,0 +1,15 @@
+export EDITOR=emacs
+
+alias code='cd ~/Code'
+
+shortcuts() {
+    emacs ~/.bash_profile
+}
+
+# GIT Commands
+gsave() {
+    git add .
+    git commit -m "Test Commit. Don't push"
+}
+
+#greset() {}
